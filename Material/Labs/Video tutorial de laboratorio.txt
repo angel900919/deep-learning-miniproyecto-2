@@ -1,0 +1,152 @@
+Hola a todos, mi nombre es Andrés Mugner
+y voy a ser su guía en este laboratorio. El objetivo de este laboratorio es
+explorar los transformers de lenguaje. Utilizaremos un transformer
+de lenguaje preentrenado, conocido como DistilBERT, y lo
+utilizaremos para clasificar oraciones para ver si transmiten un sentimiento
+positivo o un sentimiento negativo. Entonces, nuestro objetivo va a ser
+clasificar sentimientos en oraciones. Nuestra base de datos va a ser entonces
+oraciones, es texto, va a entrar a nuestro modelo y queremos clasificar,
+ver si ese texto es positivo o negativo. En particular, veremos unas oraciones
+que son reseñas de películas, exploremos un poco más nuestro modelo. Entonces, veremos que realmente nuestro
+clasificador consiste de dos modelos distintos. Entonces, en este diagrama podemos
+ver el flujo de los datos a través de nuestro modelo. Entonces, va a entrar nuestra oración y
+lo que nosotros llamamos nuestro modelo, en verdad, va a ser dos modelos distintos. Entonces, primero, tendremos nuestro transformer de lenguaje,
+que se llama DistilBERT. DistilBERT es una versión más pequeña de
+una arquitectura muy célebre conocida como BERT. La idea es que va a funcionar como
+un preprocesamiento de los datos. Vamos a utilizar las propiedades de los
+transformers del lenguaje para encontrar una codificación de la oración
+en un espacio latente. Luego, esta oración transformada
+pasará a nuestro segundo modelo, que es una regresión logística. La regresión logística es un algoritmo
+clásico de reconocimiento de patrones que simplemente funciona
+como un clasificador lineal. Es decir, clasifica datos en dos
+distintas categorías, separándolas por un hiperplano, dependiendo del
+espacio en el que vivan nuestros datos. Entonces, a esa regresión logística
+le entrarán las oraciones codificadas en el espacio latente,
+gracias a nuestro modelo DistilBERT. Y con esa nueva
+representación de los datos, podrá clasificarlos para ver
+si son positivos o negativos. you que entendemos cómo
+funciona nuestro modelo, exploremos un poco más la base de datos. Entonces, como dijimos, la base de datos
+van a ser oraciones, reseñas de películas. Es una base de datos que se conoce como
+SST2 y fue desarrollada por el Grupo de Procesamiento del Lenguaje Natural
+de la Universidad de Stanford. Entonces, las etiquetas de cada oración
+vienen dadas por los números 1 o 0. 1 si la reseña es positiva,
+o 0 si la reseña es negativa. Importamos las librerias necesarias,
+NumPy, pandas, Scikit-Learn y Torch, PyTorch,
+lo vamos a utilizar en este laboratorio. Y acá descargamos nuestra base de
+datos como un dataframe de pandas. Utilizaremos solamente 2.000 oraciones
+para que el entrenamiento sea un poco más rápido. Y acá podemos ver cómo es la
+distribución de nuestras etiquetas. Entonces podemos ver que de las
+2.000 oraciones que tenemos, 1.041 oraciones son positivas. Tenemos 1.041 reseñas positivas
+y 959 reseñas negativas, o sea que es una base de datos balanceada. Tenemos más o menos la misma cantidad
+de datos en ambas categorías. Ahora sí, cargaremos el primer
+bloque de nuestro modelo, es decir, nuestro transformer de lenguaje. Entonces, vamos a descargar un
+modelo conocido como DistilBERT, podemos pensar,
+como un hijo pequeño del modelo BERT, que es un modelo célebre del
+procesamiento de lenguaje natural. Es un modelo desarrollado por
+el equipo de Hugging Face, es una comunidad que you hemos explicado
+anteriormente en otros laboratorios. Y aquí les dejé el enlace donde pueden ver
+el artículo donde se diseñó este modelo. Se llama DistilBERT porque es una
+versión destilada del modelo Bert, que tiene muchísimos más parámetros. El modelo DistilBERT se entrenó con un
+procedimiento conocido como destilación. Es un proceso en el cual un modelo más
+pequeño, que se conoce como el alumno, se entrena para imitar el comportamiento
+de un modelo más grande y más complejo, que se conoce como el profesor. En nuestro caso, el alumno es DistilBERT
+y el profesor es el modelo BERT. Y ahí en el artículo, se los dejé para que
+vean que el modelo es un 40% más pequeño. Es más liviano, más rápido, tiene menos parámetros y conserva muchas
+capacidades que tiene el modelo BERT. Entonces, es el modelo que utilizaremos,
+es más sencillo computacionalmente. Aquí lo descargamos desde la
+librería de Hugging Face, y you estamos listos para hacer el
+preprocesamiento de nuestros datos. Como nuestro modelo es un transformer de
+lenguaje, nuestro primer bloque de nuestro modelo, debemos primero hacer un
+preprocesamiento de los datos. Recordemos que la primera parte de un
+transformer de lenguaje se encarga de encontrar una representación
+numérica de nuestras oraciones. Porque es un modelo que está
+diseñado para procesar texto, eso es lo que haremos en esta sección. Primero, haremos la tokenización de los
+datos, recordemos que esto significa que estamos tomando las palabras,
+y a cada palabra le asignamos un token. Que un token es un valor numérico
+que se le asigna a cada palabra. También añadiremos unos tokens especiales,
+CLS y SEP. El token SEP le indica al modelo
+cuándo ha terminado una oración, cuándo comienza otra. Y el token CLS le indica al modelo
+que queremos que procese cada oración como un todo, es decir,
+que clasifique oraciones y no palabras. Ahora, como las oraciones pueden ser
+de distinto tamaño, podemos obtener estas oraciones tokenizadas,
+pueden ser de tamaños distintos. Y queremos que los datos sean
+todos de la misma longitud, entonces haremos un procedimiento
+que se conoce como padding. En el padding, añadimos tokens de
+relleno a nuestros vectores tokenizados, eso es lo que hace esta celda. Y hacemos esto para que todos nuestros
+datos tengan la misma longitud. Acá podemos ver,
+ahora que tenemos 2.000 oraciones, y cada operación tokenizada y con
+padding que tiene el mismo tamaño. Ahora, como hemos añadido
+unos tokens de relleno, también debemos decirle
+al modelo que los ignore. Esto se hace con un procedimiento
+conocido como masking, y es lo que hace este código de acá,
+que es una máscara de atención. Aquí podemos ver un pequeño resumen del
+preprocesamiento que estamos haciendo. Entonces, tenemos una oración, es texto, se tokeniza,
+la separamos en diferentes palabras. Luego, añadimos los tokens especiales
+que mencionamos, CLS y SEP. Y finalmente, encontramos la
+representación numérica de estos tokens. Luego, de esto,
+seguiría el padding y el masking. Entonces, you hemos descargado
+nuestro modelo DistilBERT, nuestro transformer de lenguaje, y you hemos preprocesado nuestros datos
+para que puedan ingresar a este modelo. Entonces, veamos qué está
+haciendo este primer bloque. Entonces, a DistilBERT
+le entran oraciones, 2.000 oraciones,
+y cada oración tiene una etiqueta, dependiendo de si la reseña
+es positiva o negativa. Estas oraciones pasan por el
+preprocesamiento de los datos, ingresa nuestro modelo DistilBERT. Y lo que queremos ver es el
+embedding de las oraciones, es decir, la codificación que ha hecho
+el modelo en un espacio latente. Entonces, en nuestro caso, ahora,
+tras pasar por el modelo DistilBERT, tendremos unos vectores de tamaño 767,
+es un tamaño fijo para cada oración. Entonces, estos van a ser unos vectores
+numéricos que viven en un espacio de dimensión alta, es el espacio latente. La idea es que DistilBERT encuentra una
+representación de estos datos adecuada, que da información sobre qué tan
+positiva o negativa es cada reseña. Entonces, a la salida de
+DistilBERT vamos a tener estos vectores numéricos y conservaremos
+la etiqueta de cada uno. Estas van a ser las entradas
+de nuestro segundo bloque, nuestra regresión logística. Eso es lo que hace la función model, es un paso feedforward a través
+del modelo DistilBERT. Entonces, si invocamos la función model,
+lo que hacemos es que pasamos una oración, pasa por DistilBERT y obtenemos
+esta representación numérica. Acá podemos ver que las salidas
+son precisamente estos vectores en este espacio latente y que conservamos
+las mismas etiquetas originales. Ahora que comprendemos cómo funciona
+nuestro primer bloque de nuestro modelo, veamos qué sucede con el segundo bloque,
+es decir, con la regresión logística. Vamos acá, nuestro esquema general
+de nuestro modelo, tenemos nuestras oraciones, nuestras reseñas de películas,
+pasan por DistilBERT. Y de DistilBERT obtenemos esta
+representación numérica de nuestras oraciones, y ahora queremos ver
+qué pasa con este segundo bloque, este va a ser nuestro clasificador. Entonces, aquí podemos ver que la
+relación logística, como you explicamos, es un clasificador lineal, entonces
+queremos entrenarlo para que clasifique. Eso es lo que vamos a pensar ahora, que
+las entradas, los datos de entrada de esta regresión logística, son precisamente
+las salidas del modelo DistilBERT, nuestro transformer de lenguaje. Entonces, debemos, como siempre, dividir nuestros datos en datos de
+entrenamiento y datos de validación. Eso es lo que hacemos en esta celda, y en
+la siguiente celda, entrenamos nuestra regresión logística, todo esto lo
+hacemos con paquetes de PyTorch. Tras entrenar nuestro segundo bloque,
+nuestra regresión logística, podemos calcular qué tan
+bueno fue su desempeño. Entonces, lo que hacemos es calcular
+la precisión en el conjunto de prueba, y acá podemos ver que obtenemos
+una precisión del 85%. Entonces, noten que, primero,
+el modelo DistilBERT no lo entrenamos, sino que lo descargamos you preentrenado
+y lo estamos usando como una capa de preprocesamiento de los datos. Entonces, los datos pasan por DistilBERT,
+que no fue entrenado, lo descargamos you para entrenado,
+y lo que verdaderamente entrenamos es el segundo bloque de nuestro modelo,
+que es la regresión logística. Entonces, esta regresión logística es un
+modelo bastante sencillo si lo comparamos con clasificadores más complejos
+que hemos visto durante el curso. Es mucho más sencillo que, por ejemplo,
+una red neuronal profunda. Lo que hacemos con nuestro transformer
+de lenguaje es que podemos potenciar este clasificador sencillo si lo usamos
+como una capa de preprocesamiento. you que el transformer de lenguaje
+encuentra una buena representación de nuestras oraciones en un
+espacio más complejo. Este es el poder de utilizar
+modelos en conjunto. Además de medir la precisión de nuestro
+clasificador, podemos ver qué predicciones está haciendo para nuestras reseñas,
+eso es lo que hacemos en esta celda. Entonces, imprimimos oraciones,
+datos de entrada, y mostramos cuál fue la etiqueta que predijo nuestro
+modelo y cuál fue la etiqueta real. Entonces, podemos ver en qué oraciones
+está acertando la predicción de nuestro modelo y en qué oraciones
+está fallando la predicción. Entonces, para concluir, en este
+laboratorio aprendimos cómo descargar y utilizar un transformer
+de lenguaje preentrenado. Además una versión destilada de un
+transformer mucho más complejo. Y vimos cómo podemos utilizarlo con
+una capa de preprocesamiento para potenciar clasificadores muy
+sencillos y fáciles de entrenar. Esto nos da mucha flexibilidad,
+pues en el segundo bloque donde pusimos la regresión logística, podemos utilizar
+cualquier clasificador que deseemos. [MUSIC]

@@ -1,0 +1,29 @@
+## Clean English Version (Transformer-related content only)
+
+A language model is a system designed to understand human language by identifying statistical patterns. Although many people associate them with systems like ChatGPT or Gemini, they have existed for a long time. Earlier approaches included simple techniques such as n-grams, which rely on basic statistics to build rudimentary language models. The recent progress comes from combining deep learning with large volumes of data. Models that use neural networks and large datasets are known as Large Language Models (LLMs).
+
+All modern language models share a common architecture called the Transformer. This architecture was introduced in the paper *“Attention Is All You Need”*. Even though it may not look like a traditional neural network, internally it performs matrix operations similar to standard neural networks. It is simply organised differently, which gives it important advantages.
+
+The Transformer was originally designed for machine translation. It consists of two main components: an encoder and a decoder. The encoder processes input text and converts it into a vector representation. The decoder then uses that representation to generate output text, such as a translation into another language.
+
+The main reason Transformers became dominant was not an immediate large improvement in accuracy, but their efficiency. Previous approaches like Recurrent Neural Networks (RNNs) required more computation and were difficult to parallelise. Transformers allow efficient parallel training, which made large-scale models feasible. Today, most language models are based on this architecture or slight variations of it.
+
+After the Transformer was introduced, research split into two directions: models using the encoder and models using the decoder. OpenAI’s GPT models use only the decoder. These models are trained using a method called generative pre-training, where the objective is to predict the next token given previous tokens.
+
+In this setup, text is first tokenised into smaller units called tokens. These tokens are converted into vectors and passed into the model. The training objective is to maximise the probability of predicting the next token given a sequence of previous tokens. This is a conditional probability modelling problem.
+
+Predicting the next token may seem simple, but it becomes complex when trained on massive datasets such as internet text. The model learns patterns that allow it to solve tasks like reasoning, answering questions, or completing sentences. However, fundamentally, it is still predicting the most likely next token rather than reasoning in a human sense.
+
+Text generation works iteratively. The model predicts one token, appends it to the input, and then predicts the next token again. This loop continues until a special stop token is produced. This creates the appearance that the model is “speaking”, but it is simply repeating the next-token prediction process.
+
+Training typically happens in two stages. First, the model is pre-trained on large amounts of text using next-token prediction. Then, it is fine-tuned for specific tasks such as classification. Fine-tuning often involves modifying the final layer of the model to match the desired task.
+
+Another important family of models is based on the encoder, such as BERT. Instead of predicting the next token, BERT uses masked token prediction. In this approach, some tokens in the input are hidden, and the model learns to predict them. This also enables strong language understanding.
+
+Later developments introduced models that treat all tasks as text-to-text problems. Instead of changing the architecture for each task, the model always predicts text. Instructions are included in the input to guide the model. This idea influenced modern prompting techniques, where the way input is structured significantly affects performance.
+
+Research also showed that model performance improves with scale. Larger models with more parameters generally perform better. Additionally, providing examples in the input (few-shot learning) improves results. This demonstrates that models can adapt behaviour based on how the input is presented, even without updating their parameters.
+
+Another important technique is chain-of-thought prompting. Instead of directly giving an answer, the model is encouraged to generate intermediate reasoning steps. This improves performance on tasks such as mathematical reasoning by guiding the model to follow a structured process.
+
+Overall, modern language models are based on the Transformer architecture, trained through large-scale next-token prediction, and adapted to tasks using prompting, fine-tuning, and structured input design.

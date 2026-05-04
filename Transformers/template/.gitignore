@@ -1,0 +1,13 @@
+# gitignore for a study folder
+
+# debugging / scratch — may contain answers, course material under licence
+.study/current-questions.md
+
+# personal exam attempts may contain identifying info
+exams/*/my-attempt.md
+
+# raw lecture transcripts may be under copyright; review per source
+# (uncomment if your material is licensed and shouldn't be committed)
+# material/transcripts/
+# material/readings/
+# material/lectures/
