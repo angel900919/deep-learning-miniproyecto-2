@@ -1,5 +1,5 @@
 .idea/
 .venv/
 .DS_Store
-README.md
+README_local.md
 artifacts/modelo_principal/model.safetensors
