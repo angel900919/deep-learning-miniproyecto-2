@@ -1,0 +1,4 @@
+.idea
+.venv
+README.md
+artifacts/modelo_principal/model.safetensors
