@@ -1,4 +1,4 @@
-# Miniproyecto 2 — Clasificación de Artículos de la BBC con Transformers
+# Miniproyecto 3 — Clasificación de Artículos de la BBC con Transformers
 
 **Curso:** MAIA-4213 Técnicas de Deep Learning · **Maestría en IA, Uniandes**
 **Modalidad:** parejas
